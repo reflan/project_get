@@ -8,7 +8,22 @@ class AuthController extends GetxController {
 
   Stream<User?> get streamAuthStatus => auth.authStateChanges();
 
-  void signup() async {}
+  void signup(String emailAddress, String password) async {
+    try {
+      final credential = await auth.createUserWithEmailAndPassword(
+        email: emailAddress,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   void login(String emailAddress, String password) async {
     try {
@@ -26,7 +41,10 @@ class AuthController extends GetxController {
     }
   }
 
-  void logout() async {}
+  void logout() async {
+    await auth.signOut();
+    Get.offAllNamed(Routes.LOGIN);
+  }
 
   void resetPassword() async {}
 }

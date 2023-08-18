@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:project_get/app/routes/app_pages.dart';
 
 import '../../../controllers/auth_controller.dart';
 import '../controllers/login_controller.dart';
@@ -39,6 +40,19 @@ class LoginView extends GetView<LoginController> {
                   controller.cPass.text,
                 ),
                 child: Text("Login"),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Belum Punya Akun ?"),
+                  TextButton(
+                    onPressed: () => Get.toNamed(Routes.SIGNUP),
+                    child: Text("Daftar Disini"),
+                  )
+                ],
               ),
             ],
           ),
