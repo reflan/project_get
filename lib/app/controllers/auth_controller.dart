@@ -10,10 +10,20 @@ class AuthController extends GetxController {
 
   void signup(String emailAddress, String password) async {
     try {
-      final credential = await auth.createUserWithEmailAndPassword(
+      UserCredential myUser = await auth.createUserWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
+      await myUser.user!.sendEmailVerification();
+      Get.defaultDialog(
+          title: "Verifikasi email",
+          middleText:
+              "Kami telah mengirimkan verfikasi ke email $emailAddress.",
+          onConfirm: () {
+            Get.back(); //close dialog
+            Get.back(); //login
+          },
+          textConfirm: "OK");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -27,11 +37,19 @@ class AuthController extends GetxController {
 
   void login(String emailAddress, String password) async {
     try {
-      final credential = await auth.signInWithEmailAndPassword(
+      UserCredential myUser = await auth.signInWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
-      Get.offAllNamed(Routes.HOME);
+      if (myUser.user!.emailVerified) {
+        //untuk routing
+        Get.offAllNamed(Routes.HOME);
+      } else {
+        Get.defaultDialog(
+          title: "Verifikasi email",
+          middleText: "Harap verifikasi email terlebih dahulu",
+        );
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
