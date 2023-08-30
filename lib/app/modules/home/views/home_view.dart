@@ -3,11 +3,37 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:project_get/app/controllers/auth_controller.dart';
+import 'package:project_get/app/routes/app_pages.dart';
 
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   final cAuth = Get.find<AuthController>();
+
+  void showOption(id) async {
+    var result = await Get.dialog(
+      SimpleDialog(
+        children: [
+          ListTile(
+            onTap: () {},
+            title: Text('Update'),
+          ),
+          ListTile(
+            onTap: () {
+              Get.back();
+              controller.deleteProduct(id);
+            },
+            title: Text('Delete'),
+          ),
+          ListTile(
+            onTap: () => Get.back(),
+            title: Text('Close'),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +90,7 @@ class HomeView extends GetView<HomeController> {
                 subtitle: Text(
                     "${(listAllDocs[index].data() as Map<String, dynamic>)["price"]}"),
                 trailing: IconButton(
-                  onPressed: () {},
+                  onPressed: () => showOption(listAllDocs[index].id),
                   icon: Icon(Icons.more_vert),
                 ),
               ),
@@ -76,7 +102,7 @@ class HomeView extends GetView<HomeController> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => Get.toNamed(Routes.ADD_PRODUCT),
         child: Icon(Icons.add),
       ),
     );

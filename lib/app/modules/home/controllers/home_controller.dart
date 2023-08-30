@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -14,5 +15,11 @@ class HomeController extends GetxController {
   Stream<QuerySnapshot<Object?>> streamData() {
     CollectionReference products = firestore.collection('products');
     return products.snapshots();
+  }
+
+  void deleteProduct(String id) {
+    DocumentReference docRef = firestore.collection("products").doc(id);
+
+    try {} catch (e) {}
   }
 }
