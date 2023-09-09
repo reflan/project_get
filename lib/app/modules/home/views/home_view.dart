@@ -15,7 +15,13 @@ class HomeView extends GetView<HomeController> {
       SimpleDialog(
         children: [
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Get.back();
+              Get.toNamed(
+                Routes.UPDATE_PRODUCT,
+                arguments: id,
+              );
+            },
             title: Text('Update'),
           ),
           ListTile(
